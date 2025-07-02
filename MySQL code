@@ -1,0 +1,43 @@
+SELECT * FROM pizza_sales;
+
+Select SUM(total_price)/ count(distinct order_id) AS avg_order_value From pizza_sales;
+
+SELECT SUM(quantity) AS total_pizza_sold FROM pizza_sales;
+
+SELECT COUNT(DISTINCT order_id) AS total_orders FROM pizza_sales;
+
+SELECT SUM(quantity)/COUNT(DISTINCT order_id) AS avg_pizza_per_order FROM pizza_sales;
+
+SELECT 
+  DAYNAME(STR_TO_DATE(order_date, '%d-%m-%Y')) AS day_of_week,
+  COUNT(DISTINCT order_id) AS total_orders
+FROM 
+  pizza_sales
+WHERE
+  order_date IS NOT NULL
+GROUP BY 
+  day_of_week
+ORDER BY 
+  FIELD(day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+  
+SELECT monthname(STR_TO_DATE(order_date, '%d-%m-%Y')) AS Month_of_year, COUNT(DISTINCT order_id) AS total_orders FROM pizza_sales
+WHERE order_date IS NOT NULL
+GROUP BY Month_of_year
+ORDER BY FIELD(Month_of_year, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+
+SELECT pizza_category, SUM(total_price) * 100/ (SELECT sum(total_price) FROM pizza_sales) FROM pizza_sales
+GROUP BY pizza_category;
+
+SELECT pizza_category, SUM(total_price) FROM pizza_sales
+GROUP BY pizza_category;
+
+SELECT pizza_category, SUM(quantity) FROM pizza_sales
+GROUP BY pizza_category;
+
+SELECT pizza_name, SUM(total_price), SUM(quantity), COUNT(DISTINCT order_id)  FROM pizza_sales
+GROUP BY pizza_name
+ORDER BY SUM(total_price) desc, SUM(quantity) desc, COUNT(DISTINCT order_id) desc
+LIMIT 5;
+
+SELECT pizza_size, SUM(total_price) * 100/ (SELECT sum(total_price) FROM pizza_sales) FROM pizza_sales
+GROUP BY pizza_size;
